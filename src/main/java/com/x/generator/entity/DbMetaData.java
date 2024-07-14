@@ -1,4 +1,4 @@
-package com.x.generator.core;
+package com.x.generator.entity;
 
 import lombok.Data;
 

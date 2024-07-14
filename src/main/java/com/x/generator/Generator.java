@@ -5,10 +5,10 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.x.generator.config.GlobalConfig;
 import com.x.generator.config.PathInfo;
-import com.x.generator.core.BaseConst;
-import com.x.generator.core.EntityMetaData;
+import com.x.generator.constant.BaseConst;
+import com.x.generator.entity.EntityMetaData;
 import com.x.generator.core.EntityMetaDataBuilder;
-import com.x.generator.core.MetaDataContainer;
+import com.x.generator.entity.MetaDataContainer;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -50,7 +50,7 @@ public class Generator {
         // 输出文件基础路径
         pathInfo.setBaseOutputPath(projectPath + "src/main/java/" + basePackage);
         // 实体类所在路径
-        pathInfo.setModelDir("model/v1");
+        pathInfo.setModelTplDir("model/v1");
         pathInfo.setEntityTplName("Entity");
         // 包名
         pathInfo.setControllerDir("controller");
@@ -77,7 +77,7 @@ public class Generator {
         //基础的输出路径
         String baseOutputPath = pathInfo.getBaseOutputPath();
         //model 模板路径
-        String modelPath = pathInfo.getModelDir();
+        String modelPath = pathInfo.getModelTplDir();
         //model 模板文件名前缀
         String entityTplName = pathInfo.getEntityTplName();
         for (MetaDataContainer container : list) {
@@ -131,6 +131,11 @@ public class Generator {
             //mapper
             outputPath = getOutputPath(baseOutputPath, PathInfo.joinPath(pathInfo.getMapperDir(), entityName + "Mapper"));
             generateFile(getTemplateRelaPath(serviceTplDir, BaseConst.MAPPER_NAME), outputPath, entityMetaData, configuration);
+
+            //mapperXml
+            outputPath = getXmlOutputPath(baseOutputPath, PathInfo.joinPath(pathInfo.getMapperXmlDir(), entityName + "Mapper"));
+            generateFile(getXmlTemplateRelaPath(serviceTplDir, BaseConst.MAPPER_NAME), outputPath, entityMetaData, configuration);
+
         }
     }
 
@@ -165,8 +170,20 @@ public class Generator {
         return path;
     }
 
+    public static String getXmlOutputPath(String baseOutputPath, String childPath) {
+        String path = baseOutputPath + File.separator + childPath + ".xml";
+        path = path.replaceAll("\\\\", "/");
+        return path;
+    }
+
     public static String getTemplateRelaPath(String relativePath, String childPath) {
         String path = relativePath + File.separator + childPath + ".java.ftl";
+        path = path.replaceAll("\\\\", "/");
+        return path;
+    }
+
+    public static String getXmlTemplateRelaPath(String relativePath, String childPath) {
+        String path = relativePath + File.separator + childPath + ".xml.ftl";
         path = path.replaceAll("\\\\", "/");
         return path;
     }

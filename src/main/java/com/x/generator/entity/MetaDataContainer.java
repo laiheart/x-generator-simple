@@ -1,5 +1,6 @@
-package com.x.generator.core;
+package com.x.generator.entity;
 
+import com.x.generator.entity.EntityMetaData;
 import lombok.Data;
 
 /**

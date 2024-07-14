@@ -17,7 +17,7 @@ public class PathInfo {
 
     private String baseOutputPath;
 
-    private String modelDir = "model" + File.separator + "v1";
+    private String modelTplDir = joinPath("model", "v1");
     /**
      * 第一个.前的名称
      */
@@ -25,7 +25,7 @@ public class PathInfo {
     /**
      *
      */
-    private String serviceTplDir = "service" + File.separator + "v1";
+    private String serviceTplDir = joinPath("service", "v1");
     /**
      *
      */
@@ -37,11 +37,7 @@ public class PathInfo {
     /**
      *
      */
-    private String serviceDir = "db" + File.separator + "service";
-    /**
-     *
-     */
-    private String serviceImplDir = joinPath(serviceDir, "impl");
+    private String serviceDir = joinPath("db", "service");
     /**
      *
      */
@@ -49,11 +45,19 @@ public class PathInfo {
     /**
      *
      */
+    private String serviceImplDir = joinPath(serviceDir, "impl");
+    /**
+     *
+     */
     private String serviceImplNameFormat = "%sService";
     /**
      *
      */
-    private String mapperDir = "db" + File.separator + "dao";
+    private String mapperDir = joinPath("db", "dao");
+    /**
+     *
+     */
+    private String mapperXmlDir = joinPath("db", "mapper");
 
     {
         projectDir = System.getProperty("user.dir");

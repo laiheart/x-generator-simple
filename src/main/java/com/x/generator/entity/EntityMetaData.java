@@ -1,7 +1,8 @@
-package com.x.generator.core;
+package com.x.generator.entity;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.x.generator.utils.Db2EntityDataTypeConvert;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -54,7 +55,9 @@ public class EntityMetaData extends CommonMetaData {
 
     private static void db2EntityDataTypeConvert(List<FieldInfo> fieldInfos) {
         for (FieldInfo fieldInfo : fieldInfos) {
-            String typeName = Db2EntityDataTypeConvert.db2EntityConvert(fieldInfo.getTypeName());
+            String columnTypeName = fieldInfo.getTypeName();
+            fieldInfo.setColumnTypeName(columnTypeName);
+            String typeName = Db2EntityDataTypeConvert.db2EntityConvert(columnTypeName);
             fieldInfo.setTypeName(typeName);
         }
     }
@@ -73,6 +76,7 @@ public class EntityMetaData extends CommonMetaData {
     @Data
     public static class FieldInfo {
         private String columnName;
+        private String columnTypeName;
         private String propertyName;
         private String typeName;
         private String columnComment;

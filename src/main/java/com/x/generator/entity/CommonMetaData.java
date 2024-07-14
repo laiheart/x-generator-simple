@@ -1,4 +1,4 @@
-package com.x.generator.core;
+package com.x.generator.entity;
 
 import cn.hutool.core.date.DateUtil;
 import lombok.Data;

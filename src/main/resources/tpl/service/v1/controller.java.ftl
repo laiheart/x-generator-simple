@@ -5,7 +5,6 @@ import com.ection.platform.common.dto.ResultData;
 import com.ection.platform.common.dto.TableDataInfo;
 import ${basePackage}.business.${entityName}Business;
 import ${basePackage}.dto.${entityPackage}.*;
-import ${basePackage}.vo.${entityName}GenVo;
 import ${basePackage}.vo.${entityName}Vo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
