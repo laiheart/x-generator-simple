@@ -1,4 +1,4 @@
-package com.x.generator;
+package com.x.generator.generator;
 
 
 import cn.hutool.core.io.FileUtil;
@@ -19,43 +19,49 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author lsx
  * @date 2024-07-13
  */
-public class Generator {
+public class FileGenerator {
 
-    public static void main(String[] args) throws TemplateException, IOException, IllegalAccessException {
+    public static void main(String[] args) throws TemplateException, IOException, IllegalAccessException, InterruptedException {
+        generateFile();
+    }
+
+    public static void generateFile() throws TemplateException, IOException, IllegalAccessException {
         //配置信息
         GlobalConfig config = new GlobalConfig();
         //配置数据库等信息
         config.setDbUrl("jdbc:mysql://localhost:3306/xindada?useSSL=false&serverTimezone=UTC");
         config.setDbUser("root");
         config.setDbPassword("root");
-
         //需要生成的表
         config.setTableNames("user_answer", "app");
         config.setAuthor("lsx");
         String basePackage = "com.x.generator.generate";
         config.setBasePackage(basePackage);
         config.setTableIgnorePrefix("t_");
-
         // 获取整个项目的根路径
         String projectPath = System.getProperty("user.dir") + File.separator;
         PathInfo pathInfo = new PathInfo();
         // 模板文件基础路径
         pathInfo.setBaseInputPath(projectPath + "src/main/resources/tpl/");
-        basePackage = basePackage.replaceAll("\\.", "/");
+        // 输出文件相对路径路径
+        String baseDirectory = basePackage.replaceAll("\\.", "/");
         // 输出文件基础路径
-        pathInfo.setBaseOutputPath(projectPath + "src/main/java/" + basePackage);
+        pathInfo.setBaseOutputPath(projectPath + "src/main/java/" + baseDirectory);
         // 实体类所在路径
         pathInfo.setModelTplDir("model/v1");
+        // 实体类模板文件名
         pathInfo.setEntityTplName("Entity");
-        // 包名
+        // 各种层之间的包名
         pathInfo.setControllerDir("controller");
         pathInfo.setBusinessDir("business");
-        //
+        // 生成文件
         doGenerate(pathInfo, config);
     }
 
@@ -186,5 +192,19 @@ public class Generator {
         String path = relativePath + File.separator + childPath + ".xml.ftl";
         path = path.replaceAll("\\\\", "/");
         return path;
+    }
+
+    private static void testTimer() throws InterruptedException {
+        Timer timer = new Timer();
+        timer.schedule(new TimeTaskTest(), 1000);
+        Thread.sleep(1000 * 10);
+        timer.schedule(new TimeTaskTest(), 1000);
+    }
+
+    static class TimeTaskTest extends TimerTask {
+        @Override
+        public void run() {
+
+        }
     }
 }

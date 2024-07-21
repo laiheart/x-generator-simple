@@ -17,7 +17,7 @@ import java.util.Date;
 public class ${entityName} implements Serializable {
 
     private static final long serialVersionUID = 1L;
-<#if hasPk>
+<#if pkFieldInfo??>
 
     /**
      * ${pkFieldInfo.columnComment}
