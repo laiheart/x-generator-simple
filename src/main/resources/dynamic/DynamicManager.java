@@ -1,4 +1,4 @@
-package dynamic;
+package com.ection.platform.terminal.manager;
 
 import com.ection.platform.terminal.db.dao.DynamicMapper;
 import com.ection.platform.terminal.db.service.impl.DynamicService;
@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 不可重复等通用校验
+ *
  * @author lsx
  * @date 2024-07-31
  */
@@ -69,9 +71,11 @@ public class DynamicManager {
         DynamicObj.WhereItem whereItem = whereItemList.get(0);
         whereItem.setOrAnd("");
       }
+      //格式化 whereItem 的value
+      whereItemList.forEach(whereItem -> whereItem.setHandledValue(DynamicObj.handlerValue(whereItem.getValue())));
     }
     if (whereList.size() == 0) {
-      dynamicObj.setWhereList(null);
+      dynamicObj.setWhereListNull();
     }
   }
 }

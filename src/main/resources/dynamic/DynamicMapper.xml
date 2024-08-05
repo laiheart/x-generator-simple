@@ -26,7 +26,7 @@
       <if test="whereList != null">
         <foreach collection="whereList" item="where" separator="or ">
           <foreach collection="where.whereItemList" item="item" open="(" close=")">
-            ${item.orAnd} ${item.column} ${item.condition} ${item.value}
+            ${item.orAnd} ${item.column} ${item.condition} ${item.handledValue}
           </foreach>
         </foreach>
       </if>
