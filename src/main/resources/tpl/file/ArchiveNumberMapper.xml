@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ection.platform.drivermanager.db.dao.ArchiveNumberMapper">
+
+    <resultMap id="BaseResultMap" type="com.ection.platform.drivermanager.model.ArchiveNumber">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="archiveNoLow" column="archive_no_low" jdbcType="VARCHAR"/>
+        <result property="archiveNoHigh" column="archive_no_high" jdbcType="VARCHAR"/>
+        <result property="leftArchiveNoNumber" column="left_archive_no_number" jdbcType="INTEGER"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="page" resultType="com.ection.platform.drivermanager.respone.ArchiveNumberVo">
+      select tdan.id id,
+      tdan.name name,
+      tdan.archive_no_low archiveNoLow,
+      tdan.archive_no_high archiveNoHigh,
+      tdan.left_archive_no_number leftArchiveNoNumber,
+      tdan.create_date createDate,
+      tdan.update_date updateDate,
+      tdsa.id IS NOT NULL as associated
+      from t_drivermanager_archive_number tdan
+      LEFT JOIN t_drivermanager_simulator_account tdsa ON tdsa.archive_id = tdan.id
+      <where>
+        <if test="name != null and name != ''">
+          tdan.name like concat('%', #{name}, '%')
+        </if>
+        <if test="associated != null">
+          and tdan.id
+          <if test="associated == true">
+            in
+          </if>
+          <if test="associated == false">
+            not in
+          </if>
+          (
+          select DISTINCT(archive_id)
+          from t_drivermanager_simulator_account
+          WHERE archive_id IS NOT NULL OR archive_id != ''
+          )
+        </if>
+      </where>
+      ORDER BY id DESC
+    </select>
+
+</mapper>

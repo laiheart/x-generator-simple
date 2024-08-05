@@ -1,4 +1,4 @@
-package com.x.generator.constant;
+package com.x.generator.generator.constant;
 
 /**
  * @author lsx

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ection.platform.terminal.db.dao.DynamicMapper">
+
+  <select id="queryByWhereParams" resultType="java.util.Map">
+    select ${select}
+    from ${tableName}
+    <where>
+      <if test="list != null">
+        <foreach collection="list" item="innerList" separator="or">
+          <foreach collection="innerList" item="item" open="(" close=")">
+            ${item.orAnd} ${item.column} ${item.condition} #{item.value}
+          </foreach>
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+  <select id="query" resultType="java.util.Map">
+    select ${select}
+    from ${tableName}
+    <where>
+      <if test="cusWhere != null and cusWhere != ''">
+        ${cusWhere}
+      </if>
+      <if test="whereList != null">
+        <foreach collection="whereList" item="where" separator="or ">
+          <foreach collection="where.whereItemList" item="item" open="(" close=")">
+            ${item.orAnd} ${item.column} ${item.condition} ${item.value}
+          </foreach>
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+</mapper>
