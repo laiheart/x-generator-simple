@@ -33,20 +33,20 @@ public class FileGenerator {
         //配置信息
         GlobalConfig config = new GlobalConfig();
         //180数据库
-//        config.setDbUrl("jdbc:mysql://192.168.5.180:3306/ection?useSSL=false&serverTimezone=UTC");
-//        config.setDbUser("root");
-//        config.setDbPassword("ectiondb_#mysql");
-//        config.setTableNames("t_drivermanager_archive_number", "t_drivermanager_archive_number_record");
-//        config.setTableIgnorePrefix("t_drivermanager_");
-
-        //本地数据库
-        config.setDbUrl("jdbc:mysql://localhost:3306/xindada?useSSL=false&serverTimezone=UTC");
+        config.setDbUrl("jdbc:mysql://192.168.5.180:3306/ection?useSSL=false&serverTimezone=UTC");
         config.setDbUser("root");
-        config.setDbPassword("root");
-        //需要生成的表
-        config.setTableNames("app");
-        //忽略表前缀
-        config.setTableIgnorePrefix("");
+        config.setDbPassword("ectiondb_#mysql");
+        config.setTableNames("t_my_resource");
+        config.setTableIgnorePrefix("t_");
+
+//        //本地数据库
+//        config.setDbUrl("jdbc:mysql://localhost:3306/xindada?useSSL=false&serverTimezone=UTC");
+//        config.setDbUser("root");
+//        config.setDbPassword("root");
+//        //需要生成的表
+//        config.setTableNames("app");
+//        //忽略表前缀
+//        config.setTableIgnorePrefix("");
 
         config.setAuthor("lsx");
         String basePackage = "com.x.generator.g__";
@@ -66,8 +66,8 @@ public class FileGenerator {
         //设置模板文件的实体名
         fileInfo.setEntityName("ArchiveNumber");
         //设置dto,vo包名
-        fileInfo.setDtoDir("request");
-        fileInfo.setVoDir("response");
+        fileInfo.setDtoDir("dto/myresource");
+        fileInfo.setVoDir("vo");
         // 生成文件
         doGenerate(fileInfo, config);
     }

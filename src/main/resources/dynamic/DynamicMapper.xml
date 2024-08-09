@@ -33,4 +33,22 @@
     </where>
   </select>
 
+  <update id="update">
+    update ${tableName}
+    set
+      ${handledSet}
+    <where>
+      <if test="cusWhere != null and cusWhere != ''">
+        ${cusWhere}
+      </if>
+      <if test="whereList != null">
+        <foreach collection="whereList" item="where" separator="or ">
+          <foreach collection="where.whereItemList" item="item" open="(" close=")">
+            ${item.orAnd} ${item.column} ${item.condition} ${item.handledValue}
+          </foreach>
+        </foreach>
+      </if>
+    </where>
+  </update>
+
 </mapper>

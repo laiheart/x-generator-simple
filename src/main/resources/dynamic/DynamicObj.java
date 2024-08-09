@@ -1,4 +1,4 @@
-package dynamic;
+package com.ection.platform.terminal.manager;
 
 import com.ection.platform.common.exception.BusinessException;
 import lombok.AllArgsConstructor;
@@ -25,12 +25,12 @@ public class DynamicObj {
    * 查询字段
    */
   private String select = "*";
-
+  //=============== 查询条件 =====================
   /**
+   * cusWhere 与 whereList属于同级，cusWhere如果有值，会忽略whereList的查询条件
    * 多行数据查询，使用 or 连接。(id = 1 and name='x') or (id=2 and name = 'y')
    */
   private List<Where> whereList;
-
   /**
    * 比如 id = 1 or name = 'y' and age = 18
    */
@@ -40,7 +40,10 @@ public class DynamicObj {
   }
 
   private void setWhereList(List<Where> whereList) {
+  }
 
+  public void setWhereListNull() {
+    whereList = null;
   }
 
   /**
@@ -49,14 +52,17 @@ public class DynamicObj {
   public DynamicObj(String tableName) {
     this.tableName = tableName;
     whereList = new ArrayList<>(4);
+    setList = new ArrayList<>(4);
   }
 
+  //===================== 查询条件 =====================
+
   /**
-   * 创建查询条件
+   * 创建查询条件，并返回查询条件对象
    *
    * @return
    */
-  public Where createWhereAndAddList() {
+  public Where createWhere() {
     Where where = new Where();
     whereList.add(where);
     return where;
@@ -80,12 +86,21 @@ public class DynamicObj {
   }
 
   /**
+   * 将条件添加到列表中
+   *
+   * @param where
+   */
+  private void addWhereList(Where where) {
+    whereList.add(where);
+  }
+
+  /**
    * 格式自定 cusWhere 语句值
    *
    * @param value
    * @return
    */
-  private static Object handlerValue(Object value) {
+  public static Object handlerValue(Object value) {
     if (value instanceof String) {
       return "'" + value + "'";
     } else if (value instanceof List) {
@@ -94,15 +109,6 @@ public class DynamicObj {
       return flatList(Arrays.asList((Object[]) value));
     }
     return value;
-  }
-
-  /**
-   * 将条件添加到列表中
-   *
-   * @param where
-   */
-  public void addWhereList(Where where) {
-    whereList.add(where);
   }
 
   /**
@@ -151,22 +157,22 @@ public class DynamicObj {
     }
 
     public Where andIn(String column, List<?> value) {
-      whereItemList.add(new WhereItem(column, "in", flatList(value), "and"));
+      whereItemList.add(new WhereItem(column, "in", value, "and"));
       return this;
     }
 
     public Where andNotIn(String column, List<?> value) {
-      whereItemList.add(new WhereItem(column, "not in", flatList(value), "and"));
+      whereItemList.add(new WhereItem(column, "not in", value, "and"));
       return this;
     }
 
     public Where orIn(String column, List<?> value) {
-      whereItemList.add(new WhereItem(column, "in", flatList(value), "or"));
+      whereItemList.add(new WhereItem(column, "in", value, "or"));
       return this;
     }
 
     public Where orNotIn(String column, List<?> value) {
-      whereItemList.add(new WhereItem(column, "not in", flatList(value), "or"));
+      whereItemList.add(new WhereItem(column, "not in", value, "or"));
       return this;
     }
 
@@ -214,6 +220,12 @@ public class DynamicObj {
 
   }
 
+  /**
+   * 将列表数据格式为 （1,2）
+   *
+   * @param list
+   * @return
+   */
   private static String flatList(List<?> list) {
     if (ObjectUtils.isEmpty(list)) {
       return null;
@@ -255,6 +267,102 @@ public class DynamicObj {
      * 两个字段查询关系，可取值：or，and
      */
     private String orAnd = "and";
+    /**
+     * value处理后的值
+     */
+    private Object handledValue;
+
+    public WhereItem(String column, String condition, Object value, String orAnd) {
+      this.column = column;
+      this.condition = condition;
+      this.value = value;
+      this.orAnd = orAnd;
+    }
+  }
+
+  //====================== 更新字段与值实体类
+  /**
+   * 多条更新数据
+   */
+  private List<Set> setList;
+  /**
+   * 处理完后的set
+   */
+  private String handledSet;
+
+  private void setSetList(List<Set> setList) {
+  }
+
+  private void setHandleSet(String handledSet) {
+  }
+
+  /**
+   * 创建Set，并返回
+   *
+   * @return
+   */
+  public Set createSet() {
+    Set set = new Set();
+    this.setList.add(set);
+    return set;
+  }
+
+  @Data
+  public static class Set {
+    List<SetItem> setItemList;
+
+    public Set() {
+      setItemList = new ArrayList<>(4);
+    }
+
+    /**
+     * 更新的字段名和值
+     *
+     * @param column
+     * @param beforeValue 比如想要count字段加一， beforeValue = "count+"。最后语句就是count = count+value
+     * @param value
+     * @return
+     */
+    public Set addValue(String column, String beforeValue, Object value) {
+      SetItem setItem = new SetItem(column, beforeValue, value);
+      setItemList.add(setItem);
+      return this;
+    }
+
+    /**
+     * 更新的字段名和值
+     *
+     * @param column
+     * @param value
+     * @return
+     */
+    public Set addValue(String column, Object value) {
+      return addValue(column, null, value);
+    }
+
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public static class SetItem {
+    /**
+     * 更新字段
+     */
+    private String column;
+    /**
+     * 更新值前面的值
+     */
+    private String beforeValue;
+    /**
+     * 更新值
+     */
+    private Object value;
+
+    public SetItem(String column, String value) {
+      this.column = column;
+      this.value = value;
+    }
   }
 
 }

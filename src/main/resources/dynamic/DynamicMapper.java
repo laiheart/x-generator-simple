@@ -1,5 +1,6 @@
-package dynamic;
+package com.ection.platform.terminal.db.dao;
 
+import com.ection.platform.terminal.manager.DynamicObj;
 import com.ection.platform.terminal.manager.WhereParams;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
@@ -27,4 +28,6 @@ public interface DynamicMapper {
 
   @MapKey("id")
   List<Map<String, Object>> query(DynamicObj dynamicObj);
+
+  int update(DynamicObj dynamicObj);
 }
