@@ -214,7 +214,7 @@ public class TemplateFileMaker {
                 sb.append(line);
             }
         }
-        if (TemplateInfoHandlerTypeEnum.MODEL_HANDLER.getKey() == handlerType) {
+        if (publicNum == 1) {
             sb.append("}");
         }
         return sb.toString();

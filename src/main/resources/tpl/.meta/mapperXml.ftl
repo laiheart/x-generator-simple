@@ -12,4 +12,5 @@
     <#list fieldInfos as field>
         ${field.columnName} ${field.propertyName}<#if field?is_last == false>,</#if>
     </#list>
+    from ${tableName}
 </select>

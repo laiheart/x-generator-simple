@@ -25,3 +25,4 @@ public class ${entityName}QueryReq extends BaseEntity {
     private ${field.typeName} ${field.propertyName};
 </#list>
 
+}
